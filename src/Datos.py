@@ -128,7 +128,10 @@ def CalcularEstadistica(archivo):
     columna = input("Ingrese el nombre de la columna: ")
     with open(archivo, newline='') as f:
         lector_csv = csv.DictReader(f)
-        datos = [float(fila[columna]) for fila in lector_csv if fila[columna].replace('.', '', 1).isdigit()]
+        datos = [] 
+        for fila in lector_csv: 
+            if fila[columna].replace('.', '', 1).isdigit(): 
+                datos.append(float(fila[columna]))
     if not datos:
         print("No se encontró la columna seleccionada")
         return
@@ -136,7 +139,11 @@ def CalcularEstadistica(archivo):
     #uso de ia
     num_datos = len(datos)
     promedio = sum(datos) / num_datos
-    mediana = sorted(datos)[num_datos // 2] if num_datos % 2 != 0 else (sorted(datos)[num_datos // 2 - 1] + sorted(datos)[num_datos // 2]) / 2
+    datos_ordenados=sorted(datos)
+    if num_datos % 2 != 0: 
+        mediana = datos_ordenados[num_datos // 2] 
+    else: 
+        mediana = (datos_ordenados[num_datos // 2 - 1] + datos_ordenados[num_datos // 2]) / 2
     valor_max = max(datos)
     valor_min = min(datos)
 
@@ -150,8 +157,11 @@ def GraficarColumna(archivo):
     columna = input("Ingrese el nombre de la columna: ")
     with open(archivo, newline='') as f:
         lector_csv = csv.DictReader(f)
-        datos = [float(fila[columna]) for fila in lector_csv if fila[columna].replace('.', '', 1).isdigit()]
-
+        datos = [] 
+        for fila in lector_csv: 
+            if fila[columna].replace('.', '', 1).isdigit(): 
+                datos.append(float(fila[columna]))
+        
     if not datos:
         print("No se encontraron datos")
         return
