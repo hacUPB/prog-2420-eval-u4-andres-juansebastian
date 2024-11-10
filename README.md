@@ -8,7 +8,8 @@ ID:  000540643 y 000541479
 
 ---
 
-En la carpeta "src" se encuentra el archivo "datos" donde se halla el codigo; los archivos "archivo1.txt", "archivo2" y "ejemplo.csv" son los que se usaron como ejemplo para la ejecucion del codigo y finalmente la sustetacion se encuentra en el el siguiente link de youtube: https://youtu.be/yP_yWLye2L0-
+En la carpeta "src" se encuentra el archivo "datos" donde se halla el codigo; los archivos "archivo1.txt", "archivo2" y "ejemplo.csv" son los que se usaron como ejemplo para la ejecucion del codigo y finalmente la sustetacion se encuentra en el el siguiente link de youtube: https://youtu.be/EfQqChXB8w0
+
 
 ## pd: 
-el video quedó de 13 minutos, tratamos de explicarlo de manera mas resumida pero quedó muy largo el codigo, sin embargo, quedaron detalles pendiemtes por aclarar, si tiene alguna pregunta no dude en escribirnos por teams, ademas, en la linea 139 se presenta una list comprenhention arrojada por la IA
+el video quedó de 13 minutos, tratamos de explicarlo de manera mas resumida pero quedó muy largo el codigo, sin embargo, quedaron detalles pendiemtes por aclarar, si tiene alguna pregunta no dude en escribirnos por teams, ademas, en ciertas lineas encontramos el uso de list comprenhentions por la ia, por ende en ciertos puntos del video se van a encontrar ciertos cortes repentinos donde se van a evidenciar las correcciones de ese proceso
