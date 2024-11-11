@@ -8,7 +8,7 @@ ID:  000540643 y 000541479
 
 ---
 
-En la carpeta "src" se encuentra el archivo "datos" donde se halla el codigo; los archivos "archivo1.txt", "archivo2" y "ejemplo.csv" son los que se usaron como ejemplo para la ejecucion del codigo y finalmente la sustetacion se encuentra en el el siguiente link de youtube: https://youtu.be/EfQqChXB8w0
+En la carpeta "src" se encuentra el archivo "Datos.py" donde se halla el codigo; los archivos "archivo1.txt", "archivo2" y "ejemplo.csv" son los que se usaron como ejemplo para la ejecucion del codigo y  la muestra del funcionamiento del codigo se encuentra en el el siguiente link de youtube: https://youtu.be/EfQqChXB8w0, sin embargo, hay un archivo llamado "Datos2.py" que contiene un codigo un poco mas complejo que involucra las bibliotecas de la pc usando su ruta de acceso (uso de IA para entender como realizar esto).
 
 
 ## pd: 
