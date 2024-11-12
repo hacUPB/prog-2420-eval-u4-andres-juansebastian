@@ -1,5 +1,6 @@
 import csv
 import matplotlib.pyplot as plt
+import os
 
 def main():
     while True:
@@ -12,7 +13,7 @@ def main():
 
         opcion = input(f"Seleccione una opcion: ")
         if opcion == '1':
-            ListarArchivos()
+            listar_archivos()
         elif opcion == '2':
             ProcesarArchivos_txt()
         elif opcion == '3':
@@ -23,22 +24,29 @@ def main():
         else:
             print("opcion no valida, es del 1 al 4")
 
-def ListarArchivos():
-    print("Archivos simulados en la ruta actual")
-    print("Archivos1.txt")
-    print("ejemplo.csv")
-    print("datos.csv")
-    
-def ProcesarArchivos_txt():
-    archivo = input("ingrese el nombre del archivo de texto: ")
-    try:
-        f = open(archivo, 'r')
-        texto = f.read()
-        f.close()
-    except FileNotFoundError:
-        print("El archivo no existe ")
+def listar_archivos():
+    directorio = input("Ingrese la ruta del directorio: ") 
+    if not os.path.isdir(directorio):
+        print("La ruta ingresada no es válida o no es un directorio.")
         return
+    with os.scandir(directorio) as archivos:
+        for archivo in archivos:
+            print(archivo.name)
     
+def ProcesarArchivos_txt():    
+    ruta_archivo = input("Ingrese la ruta completa del archivo de texto: ")
+    try:
+        with open(ruta_archivo, 'r') as f:
+            texto = f.read()
+        print("Contenido del archivo:")
+        print(texto)
+    except FileNotFoundError:
+        print("El archivo no existe en la ruta especificada.")
+    except IsADirectoryError:
+        print("La ruta especificada es un directorio, no un archivo.")
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
+
     while True:
         print("Submenu")
         print("1. contar numero de palabras")
@@ -52,7 +60,7 @@ def ProcesarArchivos_txt():
         if opcion == '1':
             ContarPalabras(texto)
         elif opcion == '2':
-            RemplazarPalabras(archivo, texto)
+            RemplazarPalabras(ruta_archivo, texto)
         elif opcion == '3':
             ContarCaracteres(texto)
         elif opcion == '4':
@@ -64,13 +72,13 @@ def ContarPalabras(texto):
     Numpalabras = len(texto.split())
     print(f"El numero de palabras en el archivo es: {Numpalabras}")
 
-def RemplazarPalabras(archivo, texto):
+def RemplazarPalabras(ruta_archivo, texto):
     PalabraRemplazar = input("Ingrese la palbra a remplazaar: ")
     NuevaPalabra = input("Ingrese la nueva palabra: ")
 
     textoModificado = texto.replace(PalabraRemplazar, NuevaPalabra)
     
-    f = open(archivo, 'w')
+    f = open(ruta_archivo, 'w')
     f.write(textoModificado)
     f.close()
     print(f"La palabra {PalabraRemplazar} ha sido remplazada por {NuevaPalabra}")
@@ -84,16 +92,23 @@ def ContarCaracteres(texto):
     print(f"Numero de caracteres (sin espacios): {CarateresSinEspacio}")
   
 def ProcesarArchivos_csv():
-    archivo = input("Ingrese el nombre del archivo CSV: ")
+    ruta_archivo = input("Ingrese la ruta completa del archivo CSV: ")
     try:
-        f = open(archivo, newline='')
-        lector_csv = csv.reader(f)
-        encabezado = next(lector_csv)
+        with open(ruta_archivo, newline='') as f:
+            lector_csv = csv.reader(f)
+            encabezado = next(lector_csv)
+            datos = []
+            for fila in lector_csv:
+                datos.append(fila)
     except FileNotFoundError:
-        print("El archivo no existe ")
+        print("El archivo no existe en la ruta especificada.")
         return
-    finally:
-        f.close
+    except IsADirectoryError:
+        print("La ruta especificada es un directorio, no un archivo.")
+        return
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
+        return
 
     while True:
         
@@ -105,30 +120,33 @@ def ProcesarArchivos_csv():
 
         opcion = input(f"Seleccione una opcion: ")
         if opcion == '1':
-            mostrar_15_lineas(archivo)
+            mostrar_15_lineas(ruta_archivo)
         elif opcion == '2':
-            CalcularEstadistica(archivo)
+            CalcularEstadistica(ruta_archivo)
         elif opcion == '3':
-            GraficarColumna(archivo)
+            GraficarColumna(ruta_archivo)
         elif opcion == '4':
             print("Saliendo del programa")
             break
         else:
             print("opcion no valida, es del 1 al 4")
 
-def mostrar_15_lineas(archivo):
-    with open(archivo, newline='') as f:
+def mostrar_15_lineas(ruta_archivo):
+    with open( ruta_archivo, newline='') as f:
         lector_csv = csv.DictReader(f)
         for i, fila in enumerate(lector_csv):
             if i >= 15:
                 break
             print(fila)
 
-def CalcularEstadistica(archivo):
+def CalcularEstadistica( ruta_archivo):
     columna = input("Ingrese el nombre de la columna: ")
-    with open(archivo, newline='') as f:
+    with open( ruta_archivo, newline='') as f:
         lector_csv = csv.DictReader(f)
-        datos = [float(fila[columna]) for fila in lector_csv if fila[columna].replace('.', '', 1).isdigit()]
+        datos = [] 
+        for fila in lector_csv: 
+            if fila[columna].replace('.', '', 1).isdigit(): 
+                datos.append(float(fila[columna]))
     if not datos:
         print("No se encontró la columna seleccionada")
         return
@@ -136,7 +154,11 @@ def CalcularEstadistica(archivo):
     #uso de ia
     num_datos = len(datos)
     promedio = sum(datos) / num_datos
-    mediana = sorted(datos)[num_datos // 2] if num_datos % 2 != 0 else (sorted(datos)[num_datos // 2 - 1] + sorted(datos)[num_datos // 2]) / 2
+    datos_ordenados=sorted(datos)
+    if num_datos % 2 != 0: 
+        mediana = datos_ordenados[num_datos // 2] 
+    else: 
+        mediana = (datos_ordenados[num_datos // 2 - 1] + datos_ordenados[num_datos // 2]) / 2
     valor_max = max(datos)
     valor_min = min(datos)
 
@@ -146,12 +168,15 @@ def CalcularEstadistica(archivo):
     print(f"Valor máximo: {valor_max}")
     print(f"Valor mínimo: {valor_min}")
 
-def GraficarColumna(archivo):
+def GraficarColumna( ruta_archivo):
     columna = input("Ingrese el nombre de la columna: ")
-    with open(archivo, newline='') as f:
+    with open( ruta_archivo, newline='') as f:
         lector_csv = csv.DictReader(f)
-        datos = [float(fila[columna]) for fila in lector_csv if fila[columna].replace('.', '', 1).isdigit()]
-
+        datos = [] 
+        for fila in lector_csv: 
+            if fila[columna].replace('.', '', 1).isdigit(): 
+                datos.append(float(fila[columna]))
+        
     if not datos:
         print("No se encontraron datos")
         return
